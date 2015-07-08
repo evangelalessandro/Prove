@@ -47,9 +47,10 @@ namespace Innario
             foreach (var item in himsFilePpt)
             {
                 var file = new FileInfo(item);
-                var numero = int.Parse(file.Name.Substring(0, 3));
+                var numero = getNumero(file);
+                var nomeFile = GetNameHims(file);
 
-                himsList.Add(new Inno() { Nome = file.Name.Substring(0, file.Name.Length - 4), Numero = numero, PPT = file });
+                himsList.Add(new Inno() { Nome = nomeFile, Numero = numero, PPT = file });
             }
 
             var dirMp3 = Innario.Properties.Settings.Default.DirMp3;
@@ -57,19 +58,52 @@ namespace Innario
 
             foreach (var item in himsFileMp3)
             {
-                var numero = int.Parse(item.Name.Substring(0, 3));
+                var numero = getNumero(item);
 
 
                 var find = himsList.Where(a => a.Numero == numero).ToList();
 
                 if (find.Count == 1)
                 {
-                    find.First().MP3 = item;
+                    var itemSelect = find.First();
+                    itemSelect.MP3 = item;
+                    var nameFind = GetNameHims(item);
+                    if (nameFind.Length > itemSelect.Nome.Length)
+                    {
+                        itemSelect.Nome = nameFind;
+                    }
                 }
             }
 
 
             this.verticalListBox.ItemsSource = himsList;
+        }
+
+        private static string GetNameHims(FileInfo file)
+        {
+            var nomeFile = file.Name.Substring(0, file.Name.Length - 4);
+            return nomeFile;
+        }
+
+        private static int getNumero(FileInfo file)
+        {
+            var nomeFileSenzaEstensione = file.Name.Substring(0, 3);
+
+            var numeroFile = new StringBuilder();
+            var caratteri = nomeFileSenzaEstensione.Trim().ToArray().ToList();
+            foreach (var item in caratteri)
+            {
+                if (Char.IsNumber(item.ToString(), 0))
+                {
+                    numeroFile.Append(item);
+                }
+                else
+                {
+                    break;
+                }
+            }
+            var numero = int.Parse(numeroFile.ToString());
+            return numero;
         }
 
 
