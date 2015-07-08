@@ -12,13 +12,13 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Collections.ObjectModel;
+using System.IO;
 
-namespace AutoScrollListBox
+namespace Innario
 {
     public partial class MainWindow : Window
     {
-        ObservableCollection<Inno> m_selectedEquipmentHorizontal = new ObservableCollection<Inno>();
-        ObservableCollection<Inno> m_selectedEquipmentVertical = new ObservableCollection<Inno>();
+        private ObservableCollection<Inno> _himnList = new ObservableCollection<Inno>();
 
 
         public MainWindow()
@@ -27,66 +27,57 @@ namespace AutoScrollListBox
         }
 
 
-        protected override void OnInitialized( EventArgs e )
+        protected override void OnInitialized(EventArgs e)
         {
-            base.OnInitialized( e );
+            base.OnInitialized(e);
 
-             
-            ObservableCollection<Inno> equipmentList2 = new ObservableCollection<Inno>();
-            this.verticalListBox.ItemsSource = equipmentList2;
-            CreateEquipments( equipmentList2, "Tank-" );
-            //this.verticalSelectedItemsListBox.ItemsSource = m_selectedEquipmentVertical;
+            ReadHimns();
         }
 
 
-        private ObservableCollection<Inno> CreateEquipments( ObservableCollection<Inno> equipmentList, string prefix )
+        private void ReadHimns()
         {
-            int maxItemCount = 500;
-            for( int i = 0; i < maxItemCount; i++ )
+            var himsList = new ObservableCollection<Inno>();
+            var dir=@"C:\Users\ale\Downloads\PowerPointCanti";
+            var himsFile = Directory.GetFiles(dir, "*.ppt");
+
+            foreach (var item in himsFile)
             {
-                equipmentList.Add( new Inno() { Nome = prefix + i.ToString(), Numero =  i } );
+                var file = new FileInfo(item);
+                var numero = int.Parse(file.Name.Substring(0, 3));
+
+                himsList.Add(new Inno() { Nome = file.Name, Numero = numero,PPT=file });
             }
-            return equipmentList;
+            this.verticalListBox.ItemsSource = himsList;
         }
 
 
 
-        private void horizontalListBox_SelectionChanged( object sender, SelectionChangedEventArgs e )
+
+
+        private void verticalListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if( e.AddedItems.Count > 0 )
+            if (e.AddedItems.Count > 0)
             {
-                foreach( Inno item in e.AddedItems )
+                foreach (Inno item in e.AddedItems)
                 {
-                    m_selectedEquipmentHorizontal.Add( item );
+                    _himnList.Add(item);
                 }
             }
 
-            if( e.RemovedItems.Count > 0 )
+            if (e.RemovedItems.Count > 0)
             {
-                foreach( Inno item in e.RemovedItems )
+                foreach (Inno item in e.RemovedItems)
                 {
-                    m_selectedEquipmentHorizontal.Remove( item );
+                    _himnList.Remove(item);
                 }
             }
+            btnAvviaPresentazione.IsEnabled = _himnList.Count() > 0;
         }
 
-        private void verticalListBox_SelectionChanged( object sender, SelectionChangedEventArgs e )
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if( e.AddedItems.Count > 0 )
-            {
-                foreach( Inno item in e.AddedItems )
-                {
-                    m_selectedEquipmentVertical.Add( item );
-                }
-            }
 
-            if( e.RemovedItems.Count > 0 )
-            {
-                foreach( Inno item in e.RemovedItems )
-                {
-                    m_selectedEquipmentVertical.Remove( item );
-                }
-            }
         }
 
     }

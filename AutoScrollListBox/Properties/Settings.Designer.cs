@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace AutoScrollListBox.Properties {
+namespace Innario.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
