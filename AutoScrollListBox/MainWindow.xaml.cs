@@ -13,6 +13,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Diagnostics;
 
 namespace Innario
 {
@@ -38,16 +39,36 @@ namespace Innario
         private void ReadHimns()
         {
             var himsList = new ObservableCollection<Inno>();
-            var dir=@"C:\Users\ale\Downloads\PowerPointCanti";
-            var himsFile = Directory.GetFiles(dir, "*.ppt");
+            var dirPPT = Innario.Properties.Settings.Default.DirPPT;
+            var himsFilePpt = Directory.GetFiles(dirPPT, "*.ppt");
 
-            foreach (var item in himsFile)
+
+
+            foreach (var item in himsFilePpt)
             {
                 var file = new FileInfo(item);
                 var numero = int.Parse(file.Name.Substring(0, 3));
 
-                himsList.Add(new Inno() { Nome = file.Name, Numero = numero,PPT=file });
+                himsList.Add(new Inno() { Nome = file.Name.Substring(0, file.Name.Length - 4), Numero = numero, PPT = file });
             }
+
+            var dirMp3 = Innario.Properties.Settings.Default.DirMp3;
+            var himsFileMp3 = Directory.GetFiles(dirMp3, "*.mp3").Select(a => new FileInfo(a)).ToList();
+
+            foreach (var item in himsFileMp3)
+            {
+                var numero = int.Parse(item.Name.Substring(0, 3));
+
+
+                var find = himsList.Where(a => a.Numero == numero).ToList();
+
+                if (find.Count == 1)
+                {
+                    find.First().MP3 = item;
+                }
+            }
+
+
             this.verticalListBox.ItemsSource = himsList;
         }
 
@@ -77,6 +98,11 @@ namespace Innario
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            if (_himnList.First().MP3 != null)
+            {
+                Process.Start(_himnList.First().MP3.FullName);
+            }
+            Process.Start(_himnList.First().PPT.FullName);
 
         }
 

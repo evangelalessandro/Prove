@@ -22,5 +22,23 @@ namespace Innario.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\ale\\Downloads\\736ic.32\\736ic.32")]
+        public string DirMp3 {
+            get {
+                return ((string)(this["DirMp3"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\ale\\Downloads\\PowerPoint Canti")]
+        public string DirPPT {
+            get {
+                return ((string)(this["DirPPT"]));
+            }
+        }
     }
 }

@@ -30,7 +30,7 @@
                 <Border x:Name="Border"
                          BorderBrush="Black" 
                         BorderThickness="1" 
-                        CornerRadius="4" 
+                        CornerRadius="15" 
                         Width="auto" 
                         Height="68"
                         VerticalAlignment="Center" HorizontalAlignment="Center" Padding="1"
