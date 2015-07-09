@@ -75,7 +75,7 @@ namespace Innario
                 }
             }
 
-
+            himsList=new ObservableCollection<Inno>( himsList.OrderBy(a=>a.Numero).ToList());
             this.verticalListBox.ItemsSource = himsList;
         }
 
@@ -136,7 +136,8 @@ namespace Innario
             {
                 Process.Start(_himnList.First().MP3.FullName);
             }
-            Process.Start(_himnList.First().PPT.FullName);
+
+            Process.Start(Innario.Properties.Settings.Default.PPTExePAth,"/S " + @"""" +  _himnList.First().PPT.FullName + @"""");
 
         }
 

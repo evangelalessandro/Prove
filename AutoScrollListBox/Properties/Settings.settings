@@ -8,5 +8,8 @@
     <Setting Name="DirPPT" Type="System.String" Scope="Application">
       <Value Profile="(Default)">C:\Users\ale\Downloads\PowerPoint Canti</Value>
     </Setting>
+    <Setting Name="PPTExePAth" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">C:\Program Files\Microsoft Office\Office14\PPTVIEW.EXE</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

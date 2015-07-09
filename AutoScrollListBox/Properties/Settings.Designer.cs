@@ -40,5 +40,14 @@ namespace Innario.Properties {
                 return ((string)(this["DirPPT"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Program Files\\Microsoft Office\\Office14\\PPTVIEW.EXE")]
+        public string PPTExePAth {
+            get {
+                return ((string)(this["PPTExePAth"]));
+            }
+        }
     }
 }
