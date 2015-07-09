@@ -32,21 +32,22 @@
                         BorderThickness="1" 
                         CornerRadius="15" 
                         Width="auto" 
-                        Height="68"
-                        VerticalAlignment="Center" HorizontalAlignment="Center" Padding="1"
+                        Height="auto"
+                        VerticalAlignment="Center" HorizontalAlignment="Left" Padding="1"
                         Background="{StaticResource EquipmentItemBackground}">
-                    <StackPanel >
+                    <StackPanel  >
                         <TextBlock Text="{Binding Numero}" Foreground="White"
-                                   FontSize="15" TextAlignment="Left" 
+                                   FontSize="1" TextAlignment="Left" 
                                    VerticalAlignment="Center" 
-                                   HorizontalAlignment="Center" Margin="5"
+                                   HorizontalAlignment="Left" Margin="0"
+                                   Visibility="Collapsed"
                                    />
                         <TextBlock Text="{Binding Nome}" 
                                    Foreground="White"
                                    FontSize="20"
                                    TextAlignment="Left" 
                                    VerticalAlignment="Center"
-                                   HorizontalAlignment="Center" Margin="5"/>
+                                   HorizontalAlignment="Left" Margin="5"/>
                     </StackPanel>
                 </Border>
                 <DataTemplate.Triggers>
@@ -66,6 +67,7 @@
             <ListBox x:Name="verticalListBox"  SelectionMode="Extended"
                         Style="{StaticResource ListBoxWithAutoScroll_Vertical}"
                         Selector.SelectionChanged="verticalListBox_SelectionChanged" 
+                     KeyDown="verticalListBox_KeyDown"
                      TextSearch.TextPath="Numero" 
                      Grid.RowSpan="4" Grid.Row="0"
                      Grid.Column="0" Grid.ColumnSpan="2">
