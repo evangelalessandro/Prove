@@ -25,6 +25,13 @@ namespace Innario
                 MessageBox.Show("Already an instance is running...");
                 App.Current.Shutdown();
             }
+            else
+            {
+                // Create the startup window
+                MainWindow wnd = new MainWindow();
+                // Show the window
+                wnd.Show();
+            }
         }
     }
 }

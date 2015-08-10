@@ -70,7 +70,7 @@
                      KeyDown="verticalListBox_KeyDown"
                      TextSearch.TextPath="Numero" 
                      Grid.RowSpan="4" Grid.Row="0"
-                     Grid.Column="0" Grid.ColumnSpan="2">
+                     Grid.Column="0" Grid.ColumnSpan="2" MouseDoubleClick="verticalListBox_MouseDoubleClick"    >
                 
             </ListBox>
          <Button Style="{StaticResource GlassButton}"

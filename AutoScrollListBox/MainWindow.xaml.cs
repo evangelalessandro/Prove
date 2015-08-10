@@ -17,7 +17,8 @@ using System.Diagnostics;
 
 namespace Innario
 {
-    public partial class MainWindow : Window
+    public partial class 
+        MainWindow : Window
     {
         private ObservableCollection<Inno> _himnListSelect = new ObservableCollection<Inno>();
         private System.Timers.Timer _tm = new System.Timers.Timer(3000);
@@ -176,5 +177,9 @@ namespace Innario
 
         }
 
+        private void verticalListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            StartPresentation();
+        }
     }
 }
