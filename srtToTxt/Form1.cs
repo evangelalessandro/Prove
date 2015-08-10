@@ -33,12 +33,30 @@ namespace srtToTxt
             var srtContent = File.ReadAllLines(txtNameFile.Text);
 
             var i = 0;
+            var x = 0;
             foreach (var item in srtContent)
             {
                 i++;
                 if (i == 3)
                 {
-                    fileContent.Append(item.Trim() + " ");
+                    if (rbACapoOgniRiga.Checked)
+                    {
+                        fileContent.AppendLine(item.Trim() + " ");
+                    }
+                    else
+                    {
+                        fileContent.Append(item.Trim() + " ");
+                    }
+                    x++;
+                    if (rbAcapoOgni10.Checked)
+                    {
+                        if (x == 10)
+                        {
+                            x = 0;
+                            fileContent.AppendLine();
+                        }
+                    }
+
                 }
                 else if (i == 4)
                 {
@@ -138,6 +156,11 @@ namespace srtToTxt
                 }
             }
             return false;
+        }
+
+        private void btnExport_Click_1(object sender, EventArgs e)
+        {
+
         }
     }
 }
