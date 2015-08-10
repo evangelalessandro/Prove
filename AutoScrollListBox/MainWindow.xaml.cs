@@ -19,11 +19,14 @@ namespace Innario
 {
     public partial class MainWindow : Window
     {
-        private ObservableCollection<Inno> _himnList = new ObservableCollection<Inno>();
+        private ObservableCollection<Inno> _himnListSelect = new ObservableCollection<Inno>();
+        private System.Timers.Timer _tm = new System.Timers.Timer(3000);
+        private ObservableCollection<Inno> _himsList = new ObservableCollection<Inno>();
 
 
         public MainWindow()
         {
+            
             InitializeComponent();
         }
 
@@ -33,24 +36,40 @@ namespace Innario
             base.OnInitialized(e);
 
             ReadHimns();
+            _tm.Enabled = true;
+            _tm.Elapsed += _tm_Elapsed;
+            _tm.Start();
+            this.verticalListBox.ItemsSource = _himsList;
         }
 
+        private void _tm_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            
+            _tm.Stop();
+            _tm.Dispose();
+
+
+            ReadHimns();
+        }
 
         private void ReadHimns()
         {
-            var himsList = new ObservableCollection<Inno>();
-            var dirPPT = Innario.Properties.Settings.Default.DirPPT;
+            if (!CheckAccess())
+            {
+                // On a different thread
+                Dispatcher.Invoke(() => ReadHimns());
+                return;
+            }
+
+            var dirPPT = Properties.Settings.Default.DirPPT;
             var himsFilePpt = Directory.GetFiles(dirPPT, "*.ppt");
-
-
 
             foreach (var item in himsFilePpt)
             {
                 var file = new FileInfo(item);
                 var numero = getNumero(file);
                 var nomeFile = GetNameHims(file);
-
-                himsList.Add(new Inno() { Nome = nomeFile, Numero = numero, PPT = file });
+                _himsList.Add(new Inno() { Nome = nomeFile, Numero = numero, PPT = file });
             }
 
             var dirMp3 = Innario.Properties.Settings.Default.DirMp3;
@@ -59,10 +78,7 @@ namespace Innario
             foreach (var item in himsFileMp3)
             {
                 var numero = getNumero(item);
-
-
-                var find = himsList.Where(a => a.Numero == numero).ToList();
-
+                var find = _himsList.Where(a => a.Numero == numero).ToList();
                 if (find.Count == 1)
                 {
                     var itemSelect = find.First();
@@ -75,8 +91,8 @@ namespace Innario
                 }
             }
 
-            himsList=new ObservableCollection<Inno>( himsList.OrderBy(a=>a.Numero).ToList());
-            this.verticalListBox.ItemsSource = himsList;
+            _himsList = new ObservableCollection<Inno>(_himsList.OrderBy(a => a.Numero).ToList());
+
             verticalListBox.SelectedIndex = 0;
         }
 
@@ -113,39 +129,42 @@ namespace Innario
 
         private void verticalListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (e.AddedItems.Count > 0)
-            {
-                foreach (Inno item in e.AddedItems)
-                {
-                    _himnList.Add(item);
-                }
-            }
+            //if (e.AddedItems.Count > 0)
+            //{
+            //    foreach (Inno item in e.AddedItems)
+            //    {
+            //        _himnList.Add(item);
+            //    }
+            //}
 
-            if (e.RemovedItems.Count > 0)
-            {
-                foreach (Inno item in e.RemovedItems)
-                {
-                    _himnList.Remove(item);
-                }
-            }
-            btnAvviaPresentazione.IsEnabled = _himnList.Count() > 0;
+            //if (e.RemovedItems.Count > 0)
+            //{
+            //    foreach (Inno item in e.RemovedItems)
+            //    {
+            //        _himnList.Remove(item);
+            //    }
+            //}
+            //btnAvviaPresentazione.IsEnabled = _himnList.Count() > 0;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-
             StartPresentation();
-
         }
 
         private void StartPresentation()
         {
-            if (_himnList.First().MP3 != null)
+            if (verticalListBox.SelectedItem != null)
             {
-                Process.Start(_himnList.First().MP3.FullName);
-            }
+                var innoitem = (Inno)verticalListBox.SelectedItem;
 
-            Process.Start(Innario.Properties.Settings.Default.PPTExePAth, "/S " + @"""" + _himnList.First().PPT.FullName + @"""");
+                if (innoitem.MP3 != null)
+                {
+                    Process.Start(innoitem.MP3.FullName);
+                }
+
+                Process.Start(Innario.Properties.Settings.Default.PPTExePAth, "/S " + @"""" + innoitem.PPT.FullName + @"""");
+            }
         }
 
         private void verticalListBox_KeyDown(object sender, KeyEventArgs e)
